@@ -1,12 +1,16 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Domain / IP Diagnostics Tools</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 text-gray-900 font-sans">
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="border-b flex flex-col border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950 p-4 sm:p-6 lg:p-8 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+        <div class="flex items-center gap-x-3"><h1 class="text-lg font-semibold text-gray-900 dark:text-gray-50">{{_('Domain Diagnostics')}}</h1></div>
+        
+        <p class="text-sm text-gray-500 dark:text-gray-500">{{_('Enter domain name or IP address to check.')}}</p>
+    </div>
+    <div class="gap-2 sm:flex">
+    </div>
+</div>
 
 
 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -36,6 +40,8 @@
     <pre id="result" class="whitespace-pre-wrap break-words"></pre>
     </div>
 </div>
+
+
 
 <script>
 async function run(action, btn) {
@@ -114,8 +120,4 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-
-
-
-</body>
-</html>
+{% endblock %}
