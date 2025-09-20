@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Domain / IP Diagnostics Tools</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+<div class="max-w-6xl mx-auto p-6">
+  <header class="mb-6">
+    <h1 class="text-2xl font-bold select-none">Domain / IP Diagnostics</h1>
+  </header>
+
+  <div class="bg-white border border-gray-200 rounded-lg p-6 shadow">
+    <div class="text-sm text-gray-500 mb-2 select-none">Enter domain or IP (e.g. openpanel.com or 76.76.21.21)</div>
+    <input id="target" type="text" placeholder="example.com or 1.2.3.4" value=""
+        class="w-full p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        required />
+
+    <div class="grid grid-cols-1 sm:grid-cols-7 gap-3 mb-4">
+      <button onclick="run('whois', this)" class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-black">WHOIS</button>
+      <button onclick="run('ping', this)" class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-black">Ping</button>
+      <button onclick="run('ssl', this)" class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-black">SSL Check</button>
+      <button onclick="run('dns', this)" class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-black">DNS Lookup</button>
+      <button onclick="run('resolve', this)" class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-black">Resolve</button>
+      <button onclick="run('portscan', this)" class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-black">Port Scan</button>
+      <button onclick="run('blacklist', this)" class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-black">IP Blacklist</button>
+    </div>
+  </div>
+
+    <div id="output" class="bg-white border border-gray-200 rounded-lg p-4 mt-6 shadow min-h-[120px] hidden">
+    <pre id="result" class="whitespace-pre-wrap break-words"></pre>
+    </div>
+</div>
+
+<script>
+async function run(action, btn) {
+  const input = document.getElementById('target');
+  const outputDiv = document.getElementById('output');
+  const result = document.getElementById('result');
+
+  const targetValue = input.value.trim();
+  if (!targetValue) return;
+
+  const newUrl = new URL(window.location);
+  newUrl.searchParams.set('target', targetValue);
+  newUrl.searchParams.set('action', action);
+
+  // Only include ports for portscan, remove for other actions
+  if (action === 'portscan') {
+    const defaultPorts = [21,22,23,25,53,80,110,143,443,465,587,993,995,1433,1521,2083,2087,3306,3389,5432,8080,8443];
+    newUrl.searchParams.set('ports', defaultPorts.join(','));
+  } else {
+    newUrl.searchParams.delete('ports');
+  }
+
+  window.history.replaceState({}, '', newUrl);
+
+  const buttons = document.querySelectorAll('button');
+  const originalText = btn.innerHTML;
+  buttons.forEach(b => b.disabled = true);
+  btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-2 inline-block text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg> Loading...`;
+
+  try {
+    const form = new FormData();
+    form.append('target', targetValue);
+
+    const response = await fetch('?action=' + encodeURIComponent(action), {
+      method: 'POST',
+      body: form
+    });
+
+    const text = await response.text();
+    result.textContent = text;
+    outputDiv.classList.remove('hidden');
+  } catch (err) {
+    result.textContent = 'Error: ' + err;
+    outputDiv.classList.remove('hidden');
+  }
+
+  btn.innerHTML = originalText;
+  buttons.forEach(b => b.disabled = false);
+}
+
+
+
+// Auto-run if URL has parameters
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const target = params.get('target');
+  const action = params.get('action');
+
+  if (target && action) {
+    document.getElementById('target').value = target;
+
+    const btn = Array.from(document.querySelectorAll('button'))
+                     .find(b => b.innerText.toLowerCase().includes(action.toLowerCase()));
+    if (btn) {
+      setTimeout(() => run(action, btn), 50); // slight delay to ensure page renders
+    }
+  }
+});
+</script>
+
+
+
+
+</body>
+</html>
