@@ -1,6 +1,7 @@
 # dns-visualizer.py
 from flask import Flask, request, jsonify, render_template_string
 import re
+import os
 import socket
 import ssl
 import time
