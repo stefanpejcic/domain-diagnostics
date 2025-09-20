@@ -1,7 +1,7 @@
 # domain-diagnostics
 Domain Diagnostics - OpenPanel plugin to check IP/domain information
 
-
+![screenshot](https://i.postimg.cc/zJzJq826/slika.png)
 
 Installation:
 ```bash
