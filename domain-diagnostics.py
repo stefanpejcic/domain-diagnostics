@@ -10,6 +10,14 @@ import json
 import dns.resolver
 from datetime import datetime
 
+
+# https://python-babel.github.io/flask-babel/
+from flask_babel import Babel, _
+
+
+# Import stuff from OpenPanel core
+from app import app, inject_data, login_required_route
+
 # Validation
 def is_valid_domain(d):
     return bool(re.match(r'^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$', d, re.I)) or \
@@ -32,13 +40,6 @@ def resolve_first_ip(host):
         except:
             return None
 
-
-# https://python-babel.github.io/flask-babel/
-from flask_babel import Babel, _
-
-
-# Import stuff from OpenPanel core
-from app import app, inject_data, login_required_route
  
 @app.route('/domains/diagnostics', methods=['GET', 'POST'])
 @login_required_route
