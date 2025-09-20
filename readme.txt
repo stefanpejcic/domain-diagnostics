@@ -1,0 +1,10 @@
+name = domain-diagnostics
+title = Domain Diagnosstics
+description = Domain/IP diagnostics tools.
+link = /domains/diagnostics
+version = 1.0.0
+author = Stefan Pejcic
+category = domains
+icon = bi bi-wrench-adjustable-circle
+show_in_search = 1
+help_link = https://github.com/stefanpejcic/domain-diagnostics/
