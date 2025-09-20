@@ -15,11 +15,8 @@
 
 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 <div class="max-w-6xl mx-auto p-6">
-  <header class="mb-6">
-    <h1 class="text-2xl font-bold select-none">Domain / IP Diagnostics</h1>
-  </header>
 
-  <div class="bg-white border border-gray-200 rounded-lg p-6 shadow">
+  <div class="bg-white dark:bg-gray-700 border border-gray-200 rounded-lg p-6 shadow">
     <div class="text-sm text-gray-500 mb-2 select-none">Enter domain or IP (e.g. openpanel.com or 76.76.21.21)</div>
     <input id="target" type="text" placeholder="example.com or 1.2.3.4" value=""
         class="w-full p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
