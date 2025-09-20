@@ -1,5 +1,5 @@
 name = domain-diagnostics
-title = Domain Diagnosstics
+title = Domain Diagnostics
 description = Domain/IP diagnostics tools.
 link = /domains/diagnostics
 version = 1.0.0
